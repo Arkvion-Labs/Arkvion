@@ -10,4 +10,6 @@ class UserBase(SQLModel,):
     role:str = ""
 
 class User(UserBase, table=True):
+    __tablename__ = "users"
+
     id: Optional[int] = Field(default=None, primary_key=True)
