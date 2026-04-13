@@ -27,6 +27,7 @@ dependencies = [
     "sqlmodel",
     "tabulate",
     "typer",
+    "python-dateutil",
     "uvicorn[standard]",
 ]
 [project.optional-dependencies]
