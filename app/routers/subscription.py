@@ -189,3 +189,4 @@ def get_total_monthly(
 ):
     total = service.get_total_monthly_cost(user.id)
     return {"total": total}
+
