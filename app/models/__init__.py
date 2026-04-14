@@ -10,6 +10,5 @@ __all__ = [
     "Income",
     "Expense",
     "Subscription",
-    "Budget",
-    "ChatMessage"
+    "Budget"
 ]
