@@ -2,6 +2,7 @@ import uvicorn
 from fastapi import FastAPI, Request, status
 from starlette.middleware import Middleware
 from starlette.middleware.sessions import SessionMiddleware
+from app.cli import initialize
 from app.routers import templates, static_files, router, api_router
 from app.config import get_settings
 from contextlib import asynccontextmanager
@@ -11,6 +12,7 @@ from contextlib import asynccontextmanager
 async def lifespan(app: FastAPI):
     from app.database import create_db_and_tables
     create_db_and_tables()
+    initialize()
     yield
 
 
