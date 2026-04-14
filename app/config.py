@@ -17,5 +17,13 @@ class Settings(BaseSettings):
     db_additional_overflow:int=10
     db_pool_timeout:int=10
     db_pool_recycle:int=10
+
+    ai_api_key: str
+    ai_base_url: str
+    model_name: str
+    
+    chromadb_api_key: str
+    chromadb_tenant: str
+    chromadb_database: str
     
     model_config = SettingsConfigDict(env_file=".env")
