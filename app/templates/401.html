@@ -5,9 +5,10 @@
 {% block internal_css %}
 <style>
     body {
-        background-color: #f8f9fa;
+        background: url("{{ url_for('static', path='img/bg.png') }}") no-repeat center center fixed;
+        background-size: cover;
     }
-
+    
     .page-container {
         min-height: 100vh;
     }
