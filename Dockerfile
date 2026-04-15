@@ -12,4 +12,4 @@ COPY app ./app
 
 RUN pip install .
 
-CMD ["python", "-m", "app.main"]
+CMD ["fastapi", "run", "app/main.py", "--port", "10000"]
