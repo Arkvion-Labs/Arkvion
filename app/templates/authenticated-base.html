@@ -121,7 +121,40 @@
         border-radius: 10px;
         display: inline-block;
     }
+
+    /* Base Icon Styling */
+    #themeIcon {
+        font-size: 30px;
+        /* Makes both the sun and moon larger */
+        transition: all 0.3s ease;
+    }
+
+    [data-theme="light"] #themeIcon {
+        color: #f59e0b;
+    }
+
+    [data-theme="light"] #themeSwitch:hover #themeIcon {
+        color: #fbbf24;
+        filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.8));
+        transform: scale(1.15) rotate(20deg);
+    }
+
+    [data-theme="dark"] #themeIcon {
+        color: #cbd5e1;
+    }
+
+    [data-theme="dark"] #themeSwitch:hover #themeIcon {
+        color: #ffffff;
+        filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.7));
+        transform: scale(1.15) rotate(-15deg);
+    }
+
+    #themeSwitch:hover {
+        background-color: transparent !important;
+    }
 </style>
+
+
 {% endblock %}
 
 {% endblock %}
@@ -135,7 +168,7 @@
         <div class="d-flex align-items-center justify-content-center gap-2 mb-4 py-4"
             style="transition: all 0.5s ease-in-out;" onclick="window.location.href='/dashboard'">
             <img src="{{ url_for('static', path='img/logo.svg') }}" alt="Arkvion Logo"
-                style="width: 32px; height: 32px;" >
+                style="width: 32px; height: 32px;">
             <h3 class="text-white mb-0 fw-bold" style="letter-spacing: 0.5px;">Arkvion</h3>
         </div>
 
@@ -187,14 +220,14 @@
                     Reports & Analytics
                 </a>
             </li>
-            
+
             <li class="nav-item">
                 <a class="nav-link d-flex align-items-center {{ 'active' if request.path == '/ai' }}" href="/ai">
                     <span class="material-symbols-outlined me-2">smart_toy</span>
                     AI Assistant
                 </a>
             </li>
-            
+
             <li class="nav-item mt-auto">
                 <a class="nav-link d-flex align-items-center text-danger" href="/logout">
                     <span class="material-symbols-outlined me-2">logout</span>
@@ -218,10 +251,11 @@
             </div>
 
             <div class="ms-auto d-flex align-items-center gap-3">
-                <span class="fw-semibold">Welcome, {{user.username}}</span>
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="themeSwitch">
-                </div>
+                <span class="fw-semibold text-capitalize">Welcome, {{user.username}}</span>
+                <button class="btn d-flex align-items-center justify-content-center" id="themeSwitch"
+                    style="width: 45px; height: 45px; border-radius: 50%; border: none; background: transparent;">
+                    <span class="material-symbols-outlined" id="themeIcon">light_mode</span>
+                </button>
             </div>
 
         </nav>
@@ -289,7 +323,7 @@
 <!-- Highcharts -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/11.4.8/highcharts.js"></script>
 
- 
+
 {% block subpage_scripts %}{% endblock %}
 
 {% endblock %}

@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     const toggle = document.getElementById("themeSwitch");
+    const themeIcon = document.getElementById("themeIcon");
     const root = document.documentElement;
 
     // =========================
@@ -12,18 +13,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     root.setAttribute("data-theme", theme);
 
-    // sync toggle state
+    if (themeIcon) {
+        themeIcon.textContent = theme === "dark" ? "dark_mode" : "light_mode";
+    }
+
+    // =========================
+    // 2. HANDLE TOGGLE BUTTON CLICK
+    // =========================
     if (toggle) {
-        toggle.checked = theme === "dark";
+        toggle.addEventListener("click", async () => {
+            const currentTheme = root.getAttribute("data-theme");
+            const newTheme = currentTheme === "dark" ? "light" : "dark";
 
-        // =========================
-        // 2. HANDLE TOGGLE
-        // =========================
-        toggle.addEventListener("change", async () => {
-            const newTheme = toggle.checked ? "dark" : "light";
-
-            document.documentElement.setAttribute("data-theme", newTheme);
+            root.setAttribute("data-theme", newTheme);
             localStorage.setItem("theme", newTheme);
+            
+            if (themeIcon) {
+                themeIcon.textContent = newTheme === "dark" ? "dark_mode" : "light_mode";
+            }
 
             notifyThemeChange();
 
@@ -34,7 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
 
-            // optional feedback
             showToast(
                 "info",
                 "Theme Updated",
@@ -43,7 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
-
 
 // =========================
 // THEME HELPER (charts etc.)
