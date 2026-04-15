@@ -1,105 +1,108 @@
-# FastAPIStarter
+# Arkvion
 
-A FastAPI template for info2602 students based on the [fullstack fastapi template](https://github.com/fastapi/full-stack-fastapi-template) with a few modifications to make it a layered architecture that combines the best of MVC and service repository pattern. This codebase is structured to reduce the repeatibility of code [(the DRY principle)](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) as it was demonstrated in class that code is usually repeated when implementing functionality for a CLI app, a headless API, and a fullstack app. When writing software at scale, deduplicating code is important as it makes the codebase easier to maintain, test and scale.
+🚀 **Live Demo:** [https://arkvion.onrender.com/](https://arkvion.onrender.com/)
 
-Additionally, this codebase follows an API-first, modern AJAX flow (similar to Lab 8). In essence, this can be summarized as follows. 
+Arkvion is a comprehensive web-based financial tracker integrated with an AI assistant powered by RAG (Retrieval-Augmented Generation). 
 
-1. If we want to have this backend web application render the UI as well, we can implement our **VIEWS** that return our user interface.
-2. A small javascript script (`utils.js`) intercepts default form submissions and instead sends an appropriate endpoint to our **api** endpoints
+Developed for INFO2602, this application is built upon a custom FastAPI foundation (inspired by the [full-stack FastAPI template](https://github.com/fastapi/full-stack-fastapi-template)) that utilizes a strict, layered architecture combining the Model-View-Controller (MVC) and Service Repository patterns. 
 
-The main advantage of this application structure are plenty:
-1. We don't have to implement a jinja based frontend for the application. We can simply implement api endpoints like we did in labs 1-4 
-2. We can implement a backend API for a mobile / desktop application (where the view logic resides in java/kotlin/flutter etc)
-3. We can implement a backend API that uses a separate frontend like Vue, React, Next, Nuxt etc.
-4. We can export the list of endpoints and have other services (like AI agents) consume them 
-5. We can implement an app that functions purely from the CLI
+This codebase is structured to enforce the DRY (Don't Repeat Yourself) principle. By deduplicating code across our data access, business logic, and presentation layers, Arkvion remains easy to maintain, test, and scale—whether functioning as a headless API, a full-stack web app, or a CLI tool.
 
+## How the Application Flows
 
-## What is the Model View Controller (MVC) pattern?
+Arkvion follows an API-first, modern AJAX flow:
+1. **Views:** The application can render the user interface directly via backend view routes.
+2. **AJAX Interception:** A small JavaScript script (`app/static/js/utils.js`) intercepts default form submissions from the UI and securely routes the data to the appropriate backend **API** endpoints.
 
-The MVC pattern is a code pattern that is used to organise the modules of a project and when applied to a project, it usually works as follows:
+Because of this decoupled structure:
+* The backend API can easily be consumed by mobile or desktop apps in the future.
+* The API endpoints seamlessly support integration with external AI agents and function-calling features.
 
-- **Models** are your SQLModel/SQLAlchemy classes (The classes that become database tables)
-- **Controllers** are utility functions used to mutate models and/or perform business logic
-- **Views** bind controllers to http routes passing along any user parameters from the request to the controller
+---
 
+## 🛠️ Getting Started
 
-## What is the Service repository pattern?
+Follow these steps to set up and run Arkvion locally on your machine.
 
-The Service Repository pattern is designed to keep business logic separate from the data access and it aims to separate the codebase into distinct layers.
+**1. Clone the repository**
+```bash
+git clone [https://github.com/your-username/Arkvion.git](https://github.com/your-username/Arkvion.git)
+cd Arkvion
+```
 
-- **The Repository Layer** acts as a mediator between the application and the data source (the database, files, etc)
-- **The Service Layer** sits between the controller and the repository and this is where business logic lives.
+**2. Create a virtual environment**
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows use: venv\Scripts\activate
+```
 
+**3. Install dependencies**
+```bash
+pip install .
+```
 
-The job of the **repository layer** is to handle ***CRUD*** operations on a model. It doesn't care about the rules at the business logic layer, it's only concerned about how to get and manipulate data. 
+**4. Configure your environment**
+You **MUST** set up your environment variables before launching the application. Copy the provided template to create your active environment file:
+```bash
+cp env.example .env
+```
+> **Note:** The preconfigured `.env` allows the app to run out-of-the-box using a local SQLite database for standard data storage. Ensure any AI/RAG-specific variables (like database paths or API keys) are also configured here. 
 
-The job of the **service layer** is to handle the **RULES** of the application. This is where the business logic comes in such as checking to see if a user's authorized to access the data.
+**5. Run the application**
+Start the development server using Uvicorn:
+```bash
+uvicorn app.main:app --reload
+```
+
+**6. Access the App**
+* **Web UI:** Open your browser to `http://localhost:8000`
+* **API Docs:** View the interactive Swagger UI at `http://localhost:8000/docs`
+
+---
+
+## Architecture: MVC & Service Repository Patterns
+
+Arkvion's backend is intentionally separated into distinct layers to keep business logic isolated from data access. 
+
+### The MVC Breakdown
+- **Models:** SQLModel/SQLAlchemy classes that define our database tables.
+- **Controllers:** Utility functions used to mutate models and execute core logic.
+- **Views:** Bind controllers to HTTP routes, passing user requests to the appropriate services.
+
+### The Service Repository Breakdown
+- **The Repository Layer:** Acts as a mediator between the application and the data source (e.g., the relational database or vector databases like ChromaDB). Its only job is to handle **CRUD** operations. It doesn't care about business rules.
+- **The Service Layer:** Sits between the controller and the repository. This is where Arkvion's business logic lives, handling tasks like authorization checks, data formatting, and AI prompt orchestration before interacting with the repository.
+
+---
 
 ## App Structure
 
-This app is structuresd as follows
+Arkvion's codebase is organized as follows:
 
-<pre>
-FastAPIStarter
+```text
+Arkvion
 |-- app
-|    |- api
-|    |- dependencies
-|    |- models
-|    |- repositories
-|    |- schemas
-|    |- services
-|    |- static
-|    |- templates
-|    |- utilities
-|    |- views
-|-- tests/
-|-- env.example
-|-- pyptoject.toml
+|   |-- api             # Headless API endpoints
+|   |-- dependencies    # Dependency injection (e.g., auth, db sessions)
+|   |-- models          # Database table definitions
+|   |-- repositories    # Data access and CRUD operations
+|   |-- schemas         # Pydantic models for data validation 
+|   |-- services        # Core business logic and rules
+|   |-- static          # CSS, JS, images, and frontend assets
+|   |-- templates       # Jinja2 HTML templates
+|   |-- utilities       # Generic helper functions
+|   |-- views           # Routes for rendering the frontend UI
+|-- env.example         # Template for environment variables
+|-- pyproject.toml      # Project metadata and dependencies
 |-- README.md
-</pre>
+```
 
-#### App Structure info
+---
 
-##### Main folders
-`app` This folder contains all of our application code.
+## Deployment Notes
 
-`tests` This contains the tests (unit tests, integration tests, etc) for the application.
+If you are deploying Arkvion to a production environment (like Render, Azure, etc.), ensure the following are addressed:
 
-##### Folders inside App
-`api` This folder contains the endpoints (route fucntions) of our app.
-
-`dependencies` This folder contains the functions that we'd usually use for dependency injection e.g. getting the information of the user who's performing the request, getting a reference to the database, etc
-
-`models` This folder contains the Pydantic / SQLModel / SQLAlchemy models that eventually become database tables. Note that the files in here are strictly those that become database tables. The other models used for request and response validation go in the `schemas` folder
-
-`repositories` files in this folder are used to query the datastore, which depending on the app can be a file, database, another api, etc. Usually though, it's our database.
-
-`services` The business logic of the application lives here.
-
-`schemas` files in this folder specify pydantic / sqlmodel classes that are used for data validation only and *NOT* models that become database tables.
-
-`utilities` This contain generic helper functions
-
-`static` this contains folders that contain css, js, img and other assets we may need when this app is responsible for rendering of the frontend UI>
-
-`templates` this contains our jinja2 templates
-
-`views` this contains the route functions used for when this app is responsible for rendering the frontnend UI
-
-> Note that the file env.example provides a default set of configuration values for this application. you **MUST** create a copy of this file named `.env` before launching the app. The preconfigured environment allows a user to have an app that uses a sqlite database for a datastore as well as some other default configurations. The values in this should ideally be modified for production. For more possible variables, check out the `config.py` file
-
-
-## Using this in production
-
-
-If you so ever choose to use this template for your own projects, please consider the following:
-
-1. You **WILL** need to modify the default configuration to 
-    - Use a database that's more suitable for production. 
-    - Change the default secret
-    - Change the default environment
-2. You may need to tweak additional settings in the `config.py` file for scalability
-3. You'd need to look into a database migration / upgrade tool like alembic
-4. You may want to dockerize the application for easier deployment
-5. You may want to switch from storing cookies in localstorage to only cookies depending on your security needs.
+1. **Environment Configuration:** Update the `.env` variables to use a production-ready database (e.g., PostgreSQL) and generate a secure, unique secret key.
+2. **Database Migrations:** Utilize a migration tool like Alembic to manage schema changes in production.
+3. **Security:** Consider switching from local storage to HTTP-only, secure cookies for session management based on your specific security constraints.
